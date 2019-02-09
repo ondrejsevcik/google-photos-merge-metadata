@@ -67,9 +67,9 @@ function mergePhotosAndVideos() {
       return;
     }
 
-    let formattedTimestamp = (jsonMetadadata.photoTakenTime || {}).formatted;
-    if (!formattedTimestamp) {
-      console.error(`Can't find 'Photo taken' field for ${absoluteFilePath}. Skipping...`);
+    let timestamp = (jsonMetadadata.photoTakenTime || {}).timestamp;
+    if (!timestamp) {
+      console.error(`Can't find timestamp field for ${absoluteFilePath}. Skipping...`);
       return;
     }
 
@@ -78,8 +78,8 @@ function mergePhotosAndVideos() {
     // DateTimeOriginal EXIF tag format 
     // see https://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/datetimeoriginal.html
     let dateTimeOriginal = moment
-      // Google's export contains this weird data format
-      .utc(formattedTimestamp, "MMM D, YYYY, h:mm:ss A")
+      // moment uses timestamp in ms
+      .utc(timestamp * 1000)
       .format('YYYY:MM:DD HH:mm:ss');
     
     // 'AllDates' EXIF tag is used to overwrite all data related tags
