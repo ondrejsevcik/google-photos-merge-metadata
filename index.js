@@ -59,7 +59,7 @@ function mergePhotosAndVideos() {
   );
 
   filesToProcess.forEach((absoluteFilePath, index) => {
-    // console.log('--------------------------');
+    console.log('--------------------------');
 
     let jsonMetadadata = getMetadataJson(absoluteFilePath);
     if (!jsonMetadadata) {
@@ -69,19 +69,27 @@ function mergePhotosAndVideos() {
 
     let formattedTimestamp = (jsonMetadadata.photoTakenTime || {}).formatted;
     if (!formattedTimestamp) {
-      console.error(`Can't find 'photoTakenTime' field for ${absoluteFilePath} found. Skipping...`);
+      console.error(`Can't find 'Photo taken' field for ${absoluteFilePath}. Skipping...`);
       return;
     }
 
-    let formattedTime = moment
-      .utc(formattedTimestamp, "MMM D, YYYY, h:mm:ss A")
-      .format('YYYY-MM-DD HH:mm:ss');
-    let originalFileName = path.basename(absoluteFilePath);
-    let newFileName = `${formattedTime} - ${originalFileName}`;
+    console.log(`${index + 1}/${filesToProcess.length}: ${absoluteFilePath}`);
 
-    console.log(`Processing file ${index + 1} out of ${filesToProcess.length}`);
-    console.log(`Original file name: ${absoluteFilePath}`);
-    console.log(`New file name: ${newFileName}`);
+    // DateTimeOriginal EXIF tag format 
+    // see https://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/datetimeoriginal.html
+    let dateTimeOriginal = moment
+      // Google's export contains this weird data format
+      .utc(formattedTimestamp, "MMM D, YYYY, h:mm:ss A")
+      .format('YYYY:MM:DD HH:mm:ss');
+    
+    // 'AllDates' EXIF tag is used to overwrite all data related tags
+    // see http://owl.phy.queensu.ca/~phil/exiftool/TagNames/Shortcuts.html
+    let exiftoolCmd = `exiftool -AllDates="${dateTimeOriginal}" "${absoluteFilePath}"`;
+
+    execSync(exiftoolCmd);
+
+    
+    // modify gps exif info
   });
 }
 
