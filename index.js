@@ -84,7 +84,8 @@ function mergePhotosAndVideos() {
     
     // 'AllDates' EXIF tag is used to overwrite all data related tags
     // see http://owl.phy.queensu.ca/~phil/exiftool/TagNames/Shortcuts.html
-    let exiftoolCmd = `exiftool -AllDates="${dateTimeOriginal}" "${absoluteFilePath}"`;
+    // but we also need to remove 'TimeZone' tag as all set dates are in UTC
+    let exiftoolCmd = `exiftool -AllDates="${dateTimeOriginal}" -TimeZoneOffset="" "${absoluteFilePath}"`;
 
     execSync(exiftoolCmd);
 
