@@ -1,6 +1,8 @@
 # google-photos-merge-metadata
 
- ⚠ WIP! Currently exploring glitches in exported google takeout photos.
+---
+
+⚠️WARNING⚠️ - I don't plan to invest any more time into this utility. 
 
 ----
 
