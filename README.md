@@ -4,6 +4,8 @@
 
 ⚠️WARNING⚠️ - I don't plan to invest any more time into this utility. 
 
+Checkout this tool instead - https://github.com/mattwilson1024/google-photos-exif
+
 ----
 
 Using Google Takeout to get all your Google Photos will give you back your photos, but without metadata information (Date/Time and GPS location). This tool should help you merge back all metadata that are exported in a `json` files together with your photos. 
